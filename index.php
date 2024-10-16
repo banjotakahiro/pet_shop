@@ -7,11 +7,18 @@ require_once __DIR__ . '/functions.php';
 $dbh = connect_db();
 
 // SQL文の組み立て
-$sql = 'SELECT * FROM animals';
+// PDOで処理する際には先に変数に%ではさんだものを入れ、LIKEで拾います。
+// ※LIKEで拾ってくるワードはフォームで自由に入力してきた文字にしたいので、$keywordを設定します。
 
+$keyword = filter_input(INPUT_GET, 'keyword');
+  
+$sql = SELECT * FROM animals WHERE description LIKE :keyword;
+$keyword_param = '%' . $keyword . '%';// %ではさむ
 // プリペアドステートメントの準備
 // $dbh->query($sql) でも良い
 $stmt = $dbh->prepare($sql);
+
+$stmt->bindParam(':keyword', $keyword_param, PDO::PARAM_STR);
 
 // プリペアドステートメントの実行
 $stmt->execute();
