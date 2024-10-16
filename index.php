@@ -12,7 +12,7 @@ $dbh = connect_db();
 
 $keyword = filter_input(INPUT_GET, 'keyword');
   
-$sql = SELECT * FROM animals WHERE description LIKE :keyword;
+$sql = 'SELECT * FROM animals WHERE description LIKE :keyword';
 $keyword_param = '%' . $keyword . '%';// %ではさむ
 // プリペアドステートメントの準備
 // $dbh->query($sql) でも良い
@@ -36,6 +36,10 @@ $animals = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <h2>データの抽出成功</h2>
+    <form method="GET" action="">
+        <input type="text" name="keyword" placeholder="検索キーワードを入力">
+        <button type="submit">検索</button>
+    </form>
     <ul>
         <?php foreach ($animals as $animal): ?>
             <li><?= h($animal['type']) . 'の' . h($animal['classification']) . 'ちゃん' ?></li>
